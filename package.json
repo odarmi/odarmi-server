@@ -18,9 +18,10 @@
   },
   "homepage": "https://github.com/odarmi/odarmi-server#readme",
   "dependencies": {
-    "@google/maps": "^0.4.5",
+    "@google/maps": "^0.4.6",
     "knex": "^0.14.4",
-    "koa": "^2.5.0"
+    "koa": "^2.5.0",
+    "pg": "^7.4.1"
   },
   "devDependencies": {
     "cross-env": "^5.1.4"
