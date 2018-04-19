@@ -3,9 +3,7 @@ class TableCreator {
 
     constructor(name, createFunction) {
         this._name = name;
-        
         this._createFunction = createFunction;
-        console.log(typeof(this.createFunction));
     }
 
     get name() {
@@ -17,4 +15,4 @@ class TableCreator {
     }
 }
 
-module.exports = TableCreator;
+export { TableCreator };
