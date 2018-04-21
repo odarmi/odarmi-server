@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env NODE_PATH=. NODE_ENV=development node --experimental-modules odarmi/index.mjs",
+    "start": "cross-env NODE_PATH=. NODE_ENV=development node --experimental-modules odarmi/index.mjs | pino",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "migrate": "cross-env NODE_ENV=development knex migrate:latest"
+    "migrate": "cross-env NODE_ENV=development knex migrate:latest",
+    "remigrate": "cross-env NODE_ENV=development knex migrate:rollback && npm run migrate"
   },
   "repository": {
     "type": "git",
@@ -22,9 +23,11 @@
     "@google/maps": "^0.4.6",
     "axios": "^0.18.0",
     "config": "^1.30.0",
+    "csv": "^3.0.2",
     "js-yaml": "^3.11.0",
     "knex": "^0.14.6",
     "koa": "^2.5.0",
+    "koa-router": "^7.4.0",
     "objection": "^1.1.7",
     "pg": "^7.4.1",
     "pino": "^4.16.1"

@@ -18,8 +18,7 @@ dbConfig = {
     },
     migrations: {
         tableName: 'knex_migrations'
-    },
-    ...objection.knexSnakeCaseMappers()
+    }
 }
 
 module.exports = {

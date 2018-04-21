@@ -1,18 +1,68 @@
 
+
+import path from "path";
 import Koa from "koa";
 import Pino from "pino";
+import csv from "csv";
 import { createTables } from "./database/create-tables";
+import { CsvParser } from "./csv-parser";
+import { Mood } from "./database/models/mood";
+import { User } from "./database/models/user";
+
+const CSV_DATA_FNAME = path.resolve("odarmi/data/tung_hist_jan_mar_weather_mood.csv");
+
+async function insertCsvEntries() {
+    let pino = new Pino();
+    try {
+        let user = await User.query()
+            .where({email: "aytung95@gmail.com"});
+        
+        if (user.length == 0) {
+            pino.info("Creating user...");
+            await User.query()
+                .insert({email: "aytung95@gmail.com"});
+        }
+        
+        // Parse the csv file
+        let csvParser = new CsvParser(CSV_DATA_FNAME);
+        let csvData = await csvParser.parse();
+        
+        csvData.forEach(async (entry) => {
+            await Mood
+                .query()
+                .insert({
+                    userId: 1,
+                    name: entry.Name,
+                    address: entry.Address,
+                    category: entry.Category,
+                    distance: entry.Distance,
+                    beginTime: new Date(`${entry.BeginDate} ${entry.BeginTime}`),
+                    endTime: new Date(`${entry.EndDate} ${entry.EndTime}`),
+                    weekDay: entry.WeekDay,
+                    weather: entry.Weather,
+                    mood: entry["Mood (1,2,3,4,5::negative,neutral,positive)"] | 0
+                    // startDate: 
+                });
+         
+     });
+    }
+    
+    catch(err) {
+        pino.error(err);
+    }
+     
+}
 
 async function main() {
     let app = new Koa();
     let pino = new Pino();
-    try {
-        let res = await createTables();
-        pino.info(res);
-    }
-    catch(err) {
-        pino.error(err);
-    }
+
+    // await insertCsvEntries();
+
+
+    pino.info("Odarmi listening on port :3000");
+   
+    // pino.info(csvData);
 
     app.listen(3000);
 }

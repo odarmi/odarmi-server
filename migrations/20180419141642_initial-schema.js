@@ -11,13 +11,16 @@ exports.up = async (knex, Promise) => {
         }),
         knex.schema.createTable("moods", (table) => {
             table.increments("id").primary();
-            table.integer("userId").references("id").inTable("users");
+            table.integer("user_id").references("id").inTable("users");
             table.string("name");
             table.string("address");
             table.string("category");
             table.integer("distance");
-            table.timestamp("beginTime");
-            table.timestamp("endTime");
+            table.timestamp("begin_time");
+            table.timestamp("end_time");
+            table.integer("week_day");
+            table.string("weather");
+            table.integer("mood");
             table.timestamps(true, true);
         })
     ]);
@@ -26,7 +29,7 @@ exports.up = async (knex, Promise) => {
 
 exports.down = (knex, Promise) => {
     return Promise.all([
-        knex.schema.dropTableIfExists("users"),
-        knex.schema.dropTableIfExists("moods")
+        knex.schema.dropTableIfExists("moods"),
+        knex.schema.dropTableIfExists("users")
     ]);
 };
