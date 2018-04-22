@@ -4,23 +4,27 @@ import path from "path";
 import Koa from "koa";
 import Pino from "pino";
 import csv from "csv";
+import logger from "koa-pino-logger";
+import bodyParser from "koa-bodyparser";
+import cors from "@koa/cors";
+import { router } from "./routes/routes";
 import { createTables } from "./database/create-tables";
 import { CsvParser } from "./csv-parser";
 import { Mood } from "./database/models/mood";
 import { User } from "./database/models/user";
 
-const CSV_DATA_FNAME = path.resolve("odarmi/data/tung_hist_jan_mar_weather_mood.csv");
+const CSV_DATA_FNAME = path.resolve("/home/ben/Projects/odarmi/odarmi-ML/data/tung_hist_jan_mar_weather_nolocomotion_mood.csv");
 
 async function insertCsvEntries() {
     let pino = new Pino();
     try {
         let user = await User.query()
-            .where({email: "aytung95@gmail.com"});
+            .where({email: "aytung94@gmail.com"});
         
         if (user.length == 0) {
             pino.info("Creating user...");
             await User.query()
-                .insert({email: "aytung95@gmail.com"});
+                .insert({email: "aytung94@gmail.com"});
         }
         
         // Parse the csv file
@@ -39,8 +43,8 @@ async function insertCsvEntries() {
                     beginTime: new Date(`${entry.BeginDate} ${entry.BeginTime}`),
                     endTime: new Date(`${entry.EndDate} ${entry.EndTime}`),
                     weekDay: entry.WeekDay,
-                    weather: entry.Weather,
-                    mood: entry["Mood (1,2,3,4,5::negative,neutral,positive)"] | 0
+                    weather: entry.Weather.trim(),
+                    mood: entry.Mood | 0
                     // startDate: 
                 });
          
@@ -58,7 +62,14 @@ async function main() {
     let pino = new Pino();
 
     // await insertCsvEntries();
+    app.use(logger());
 
+    app.use(cors());
+    app.use(bodyParser());
+
+    app
+        .use(router.routes())
+        .use(router.allowedMethods());
 
     pino.info("Odarmi listening on port :3000");
    

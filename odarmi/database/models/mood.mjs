@@ -46,6 +46,8 @@ class Mood extends objection.Model {
                 endTime: { type: "date-time" },
                 createdAt: { type: "date-time" },
                 updatedAt: { type: "date-time" },
+                weekDay: { type: "integer" },
+                weather: { type: "string" },
                 mood: { type: "integer" }
             }
         };
