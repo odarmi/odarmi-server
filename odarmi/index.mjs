@@ -16,6 +16,8 @@ import { User } from "./database/models/user";
 
 const CSV_DATA_FNAME = path.resolve("/home/bennycooly/Projects/odarmi/odarmi-ML/data/tung_hist_jan_mar_weather_nolocomotion_mood.csv");
 
+const WEATHER_API_KEY = "a6aa5ae738fb6240520f5186c2696b02";
+
 async function insertCsvEntries() {
     let pino = new Pino();
     try {
@@ -76,7 +78,9 @@ async function main() {
         target: "https://api.darksky.net",
         changeOrigin: true,
         rewrite: (path) => {
-            return path.replace("/api/weather", "");
+            return path
+                .replace("/api/weather", "")
+                .replace("API_KEY", WEATHER_API_KEY);
         },
         logs: true
     }));
