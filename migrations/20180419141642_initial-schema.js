@@ -21,6 +21,9 @@ exports.up = async (knex, Promise) => {
             table.integer("week_day");
             table.string("weather");
             table.integer("mood");
+            table.string("activity");
+            table.string("place_id");
+            table.string("location_name");
             table.timestamps(true, true);
         })
     ]);
@@ -29,7 +32,9 @@ exports.up = async (knex, Promise) => {
 
 exports.down = (knex, Promise) => {
     return Promise.all([
+        knex("moods").truncate(),
         knex.schema.dropTableIfExists("moods"),
+        knex("users").truncate(),
         knex.schema.dropTableIfExists("users")
     ]);
 };

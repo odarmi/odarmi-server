@@ -7,13 +7,14 @@ import csv from "csv";
 import logger from "koa-pino-logger";
 import bodyParser from "koa-bodyparser";
 import cors from "@koa/cors";
+import proxy from "koa-proxies";
 import { router } from "./routes/routes";
 import { createTables } from "./database/create-tables";
 import { CsvParser } from "./csv-parser";
 import { Mood } from "./database/models/mood";
 import { User } from "./database/models/user";
 
-const CSV_DATA_FNAME = path.resolve("/home/ben/Projects/odarmi/odarmi-ML/data/tung_hist_jan_mar_weather_nolocomotion_mood.csv");
+const CSV_DATA_FNAME = path.resolve("/home/bennycooly/Projects/odarmi/odarmi-ML/data/tung_hist_jan_mar_weather_nolocomotion_mood.csv");
 
 async function insertCsvEntries() {
     let pino = new Pino();
@@ -36,7 +37,7 @@ async function insertCsvEntries() {
                 .query()
                 .insert({
                     userId: 1,
-                    name: entry.Name,
+                    locationName: entry.Name,
                     address: entry.Address,
                     category: entry.Category,
                     distance: entry.Distance,
@@ -70,6 +71,15 @@ async function main() {
     app
         .use(router.routes())
         .use(router.allowedMethods());
+    
+    app.use(proxy("/api/weather", {
+        target: "https://api.darksky.net",
+        changeOrigin: true,
+        rewrite: (path) => {
+            return path.replace("/api/weather", "");
+        },
+        logs: true
+    }));
 
     pino.info("Odarmi listening on port :3000");
    

@@ -34,7 +34,7 @@ class Mood extends objection.Model {
     static get jsonSchema() {
         return {
             type: "object",
-            required: ["name"],
+            required: [],
             properties: {
                 id: { type: "integer" },
                 userId: { type: "integer" },
@@ -48,7 +48,10 @@ class Mood extends objection.Model {
                 updatedAt: { type: "date-time" },
                 weekDay: { type: "integer" },
                 weather: { type: "string" },
-                mood: { type: "integer" }
+                mood: { type: "integer" },
+                activity: { type: "string" },
+                placeId: { type: "string" },
+                locationName: { type: "string" }
             }
         };
     }
