@@ -51,9 +51,20 @@ class Mood extends objection.Model {
                 mood: { type: "integer" },
                 activity: { type: "string" },
                 placeId: { type: "string" },
-                locationName: { type: "string" }
+                locationName: { type: "string" },
+                people: { type: "string" }
             }
         };
+    }
+
+    $beforeValidate(jsonSchema, obj, opt) {
+        console.log(obj);
+        obj.people = obj.people.join();
+    }
+
+    $afterGet(queryContext) {
+        console.log(this.people);
+        this.people = this.people.split(',');
     }
 }
 

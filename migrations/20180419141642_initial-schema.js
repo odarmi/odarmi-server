@@ -24,6 +24,7 @@ exports.up = async (knex, Promise) => {
             table.string("activity");
             table.string("place_id");
             table.string("location_name");
+            table.string("people");
             table.timestamps(true, true);
         })
     ]);
