@@ -10,7 +10,7 @@ import cors from "@koa/cors";
 import proxy from "koa-proxies";
 import { router } from "./routes/routes";
 import { createTables } from "./database/create-tables";
-import { CsvParser } from "./csv-parser";
+import { CsvAdapter } from "./csv-parser";
 import { Mood } from "./database/models/mood";
 import { User } from "./database/models/user";
 
@@ -31,8 +31,7 @@ async function insertCsvEntries() {
         }
         
         // Parse the csv file
-        let csvParser = new CsvParser(CSV_DATA_FNAME);
-        let csvData = await csvParser.parse();
+        let csvData = await CsvAdapter.parse(CSV_DATA_FNAME);
         
         csvData.forEach(async (entry) => {
             await Mood

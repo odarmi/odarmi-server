@@ -2,20 +2,29 @@
 import csv from "csv";
 import fs from "fs";
 
-class CsvParser {
+const defaultSaveOptions = {
+        
+};
 
-    constructor(fname, ...args) {
-        this._fname = fname;
-        this.parser = csv.parse(...args);
-    }
+class CsvAdapter {
 
-    get fname() {
-        return this._fname;
-    }
+    
 
-    parse() {
+    static save(fname, data, options=defaultSaveOptions) {
         return new Promise((resolve, reject) => {
-            let csvData = fs.readFileSync(this._fname);
+            csv.stringify(data, options, (err, output) => {
+                if (err) {
+                    reject(err);
+                }
+                fs.writeFileSync(fname, output);
+                resolve(output);
+            });
+        })
+    }
+
+    static parse(fname) {
+        return new Promise((resolve, reject) => {
+            let csvData = fs.readFileSync(fname);
             csv.parse(csvData,
                 {
                     columns: true,
@@ -33,4 +42,4 @@ class CsvParser {
 
 }
 
-export { CsvParser };
+export { CsvAdapter };
