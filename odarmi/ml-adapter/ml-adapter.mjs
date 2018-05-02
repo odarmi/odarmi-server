@@ -130,7 +130,7 @@ class MLAdapter {
             moodCsv["People-" + person] = 1
         });
 
-        let csvData = Object.assign(defaultCsvData, moodCsv);
+        let csvData = Object.assign({}, defaultCsvData, moodCsv);
         return csvData;
     }
 
