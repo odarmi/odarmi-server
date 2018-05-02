@@ -30,7 +30,7 @@ const defaultCsvData = {
     Weather: " clear-day",
     "People-Allen Wang": 0,
     "People-Allen Yu": 0,
-    "People-Ben Fu": 1,
+    "People-Ben Fu": 0,
     "People-Dad": 0,
     "People-Daniel Li": 0,
     "People-Daniel Jee": 0,
@@ -47,9 +47,9 @@ const defaultCsvData = {
     "People-Melissa Tung": 0,
     "People-Mom": 0,
     "People-Penny Lan": 0,
-    "People-Sharon Yu": 1,
+    "People-Sharon Yu": 0,
     "People-Spencer Lan": 0,
-    "People-Stacy Lan": 1
+    "People-Stacy Lan": 0
 }
 
 const MLCsvLabels = [
@@ -124,6 +124,11 @@ class MLAdapter {
             Weather: " " + mood.weather,
             WeekDay: moment(mood.beginTime).days() - 1
         }
+
+        // Now convert the people array to the one-hot encoded array
+        mood.people.forEach((person) => {
+            moodCsv["People-" + person] = 1
+        });
 
         let csvData = Object.assign(defaultCsvData, moodCsv);
         return csvData;
